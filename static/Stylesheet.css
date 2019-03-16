@@ -1,0 +1,35 @@
+
+
+
+ .starrating > input {display: none;}  /* Remove radio buttons */
+
+ .starrating > label:before {
+   content: "\f005"; /* Star */
+   margin: 2px;
+   font-size: 1em;
+   font-family: FontAwesome;
+   display: inline-block;
+ }
+
+ .starrating > label
+ {
+   color: #222222; /* Start color when not clicked */
+ }
+
+ .starrating > input:checked ~ label
+ { color: #ffca08 ; } /* Set yellow color when star checked */
+
+ .starrating1 > input:hover ~ label
+ { color: #ffca08 ;  } /* Set yellow color when star hover */
+
+ .jumbotron {
+  background: url("images/book-header.jpg") center center / cover no-repeat;
+  height: 100px;
+}
+.floatright
+{
+float: right;
+margin: 0 0 10px 10px;
+border: 1px solid #666;
+padding: 2px;
+}

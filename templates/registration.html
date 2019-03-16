@@ -1,0 +1,59 @@
+{% extends "layout.html" %}
+{% macro alert(message) %}
+<div class="alert alert-danger" role="alert">
+  {{message}}
+</div>
+{% endmacro %}
+{% block title %}
+Book's Review
+{% endblock %}
+
+{% block body %}
+</br>
+<div class="card border-dark">
+  <div class="card-body text-dark">
+    <h5 class="card-title">New User Registration</h5>
+    <form action="{{ url_for('register') }}" method="post">
+      <div class="form-group row">
+
+        <div class="col-sm-6">
+          <input class="form-control" name="inputFirstName" id="inputFirstName" placeholder="First Name" required>
+        </div>
+      </div>
+      <div class="form-group row">
+
+        <div class="col-sm-6">
+          <input type="text" class="form-control" name="inputLastName" id="inputLastName" placeholder="Last Name" required>
+        </div>
+      </div>
+      <div class="form-group row">
+
+        <div class="col-sm-6">
+          <input type="email" class="form-control" name="inputEmail" id="inputEmail" placeholder="Email" required>
+        </div>
+      </div>
+      <div class="form-group row">
+
+        <div class="col-sm-6">
+          <input type="text" class="form-control" name="inputUserName" id="inputUserName" placeholder="User Name" required>
+        </div>
+      </div>
+
+      <div class="form-group row">
+
+        <div class="col-sm-6">
+          <input type="password" class="form-control" name="inputPassword" id="inputPassword" placeholder="Password" required>
+        </div>
+      </div>
+      {% if showalert %}
+      {{alert(errormessage)}}
+      {% endif %}
+      <div class="form-group row">
+        <div class="col-sm-6">
+          <button type="submit" class="btn btn-primary">Register</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

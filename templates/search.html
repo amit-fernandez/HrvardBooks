@@ -1,0 +1,59 @@
+{% extends "layout.html" %}
+{% block title %}
+Book's Review
+{% endblock %}
+{% block body %}
+<b>Welcome {{username}}</b> <span class="badge badge-danger"><a class="text-white" href="{{ url_for('logout')}}">Logout</a></span>
+</br></br>
+<div class="card border-dark">
+  <div class="card-body">
+    <h5 class="card-title">Search Books</h5>
+    <form action="{{ url_for('search') }}" method="post">
+      <div class="form-row">
+        <div class="col-4">
+          <input type="text" class="form-control border-dark" name="isbn" placeholder="ISBN Number">
+        </div>
+        <div class="col-4">
+          <input type="text" class="form-control border-dark" name="title" placeholder="Title">
+        </div>
+        <div class="col-4">
+          <input type="text" class="form-control border-dark" name="author" placeholder="Author">
+        </div>
+      </div>
+      </br>
+      <input type="submit" name="btn" class="btn btn-primary btn-med" value="Search" />
+    </form>
+  </div>
+</div>
+</br>
+{% if books is not none and books != [] %}
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col"></th>
+      <th scope="col">ISBN Number</th>
+      <th scope="col">Title</th>
+      <th scope="col">Author</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for book in books %}
+    <tr>
+      <td><img src="http://covers.openlibrary.org/b/isbn/{{book.isbn}}-S.jpg"></td>
+      <td><a href="{{ url_for('book', isbn=book.isbn) }}">{{book.isbn}}</td>
+      <td>{{book.title}}</td>
+      <td>{{book.author}}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% elif books ==[] %}
+<div class="card border-danger">
+  <div class="card-body text-danger">
+    <h5 class="card-title">No books match the selected criteria</h5>
+    <div class="card-subtitle"> Please refine your search. </div>
+  </div>
+</div>
+{% endif %}
+{% endblock %}

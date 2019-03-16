@@ -1,0 +1,149 @@
+{% extends "layout.html" %}
+{% block title %}
+ABC Books
+{% endblock %}
+{% macro alert(message) %}
+<div class="alert alert-danger" role="alert">
+  {{message}}
+</div>
+{% endmacro %}
+{% block body %}
+<b>Welcome {{username}}</b> <span class="badge badge-danger"><a class="text-white" href="{{ url_for('logout')}}">Logout</a></span>
+<div class="row">
+  <div class="col-sm-12 text-left">
+    <div class="card bg-info text-white">
+      <div class="card-body">
+        <div class="row">
+          <div class="col text-center">
+            <img src="http://covers.openlibrary.org/b/isbn/{{book.isbn}}-M.jpg">
+          </div>
+          <div class="col">
+            <div>
+              <h5><label for="isbn" class="col-form-label"><b> {{book.title}}</b></h5>
+            </div>
+            <div>
+              <h6><label for="isbn" class="col-form-label"><b>ISBN Number :</b> {{book.isbn}}</h6>
+            </div>
+            <div>
+              <h6><label for="isbn" class="col-form-label"><b>Author :</b> {{book.author}}</h6>
+            </div>
+            <div>
+              <h6><label for="isbn" class="col-form-label"><b>Year :</b> {{book.year}}</h6>
+            </div>
+            <div>
+              <h6><label for="rating" class="col-form-label"><b>Good Read Rating :</b>
+                  <span class="badge badge-success">{{rating.average_rating}}</span>
+                  <span class="badge badge-secondary">({{rating.work_ratings_count}} reviews)</span></label></h6>
+            </div>
+            <div>
+              <h6><label for="rating" class="col-form-label"><b>ABC Books Rating :</b>
+                  {% if bookRating is not none %}
+                  <span class="badge badge-success">{{bookRating.avg_rating}}</span>
+                  <span class="badge badge-secondary">({{bookRating.count_rating}} reviews)</span>
+                  {% else %}
+                  <span class="badge badge-success">NO REVIEWS</span>
+                  {% endif %}
+                </label></h6>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</br>
+<div class="row">
+  <div class="col-sm-6">
+    {% if otherratings != [] %}
+    {% for otherrating in otherratings%}
+    <div {% if otherrating.rating < 4 %} class="card border-danger" {% else %} class="card border-success" {% endif %}>
+      <div {% if otherrating.rating < 4 %} class="card-body text-danger" {% else %} class="card-body text-success" {% endif %}>
+        <h5 class="card-title">{{ otherrating.username }}</h5>
+        <div class="starrating d-flex flex-row-reverse">
+          <input type="radio" id="star5" name={{ otherrating.username }} value="5" {% if otherrating.rating==5 %} checked="true" {% endif %} disabled="true" /><label for="star5" title="5 star"></label>
+          <input type="radio" id="star4" name={{ otherrating.username }} value="4" {% if otherrating.rating==4 %} checked="true" {% endif %} disabled="true" /><label for="star4" title="4 star"></label>
+          <input type="radio" id="star3" name={{ otherrating.username }} value="3" {% if otherrating.rating==3 %} checked="true" {% endif %} disabled="true" /><label for="star3" title="3 star"></label>
+          <input type="radio" id="star2" name={{ otherrating.username }} value="2" {% if otherrating.rating==2 %} checked="true" {% endif %} disabled="true" /><label for="star2" title="2 star"></label>
+          <input type="radio" id="star1" name={{ otherrating.username }} value="1" {% if otherrating.rating==1 %} checked="true" {% endif %} disabled="true" /><label for="star1" title="1 star"></label>
+        </div>
+        <div class="row">
+          <div class="col">
+            <label for="review" title="review">{{ otherrating.comments }}</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    </br>
+    {% endfor %}
+    {% elif otherratings == [] and myrating is not none %}
+    <div class="card border-success">
+      <div class="card-body text-success">
+        <h5 class="card-title">Only you have written review for this book</h5>
+        <div class="card-subtitle"> Please review another book. </div>
+      </div>
+    </div>
+    </br>
+    {% else %}
+    <div class="card border-success">
+      <div class="card-body text-success">
+        <h5 class="card-title">No Reviews submitted for this book!</h5>
+        <div class="card-subtitle"> Be the first one to review. </div>
+      </div>
+    </div>
+    </br>
+    {% endif%}
+  </div>
+  <div class="col-sm-6">
+    <div class="card border-success">
+      <div class="card-body">
+        <h5 class="card-title">Your Review</h5>
+        {% if myrating is none %}
+        <form action="{{ url_for('book', isbn=book.isbn) }}" method="post">
+          <div class="row">
+            <div class="col">
+              <div class="starrating d-flex justify-content-center flex-row-reverse">
+                <input type="radio" id="ostar5" name="rating" value="5" /><label for="ostar5" title="5 star"></label>
+                <input type="radio" id="ostar4" name="rating" value="4" /><label for="ostar4" title="4 star"></label>
+                <input type="radio" id="ostar3" name="rating" value="3" /><label for="ostar3" title="3 star"></label>
+                <input type="radio" id="ostar2" name="rating" value="2" /><label for="ostar2" title="2 star"></label>
+                <input type="radio" id="ostar1" name="rating" value="1" /><label for="ostar1" title="1 star"></label>
+              </div>
+            </div>
+            <div class="col">
+              <input type="submit" name="btn" class="btn btn-primary center" value="Submit Review">
+            </div>
+
+          </div>
+          </br>
+          <div class="row">
+            {% if errormessage %}
+            {{alert(errormessage)}}
+            {% endif %}
+
+          </div>
+
+          <div class="row">
+            <div class="col">
+              <textarea class="form-control" rows="6" name="review" placeholder="Write your review here!!!!"></textarea>
+            </div>
+          </div>
+        </form>
+        {% else %}
+        <div class="starrating d-flex justify-content-center flex-row-reverse">
+          <input type="radio" id="star5" name="arating" value="5" {% if myrating.rating==5 %} checked="true" {% endif %} disabled="true" /><label for="star5" title="5 star"></label>
+          <input type="radio" id="star4" name="arating" value="4" {% if myrating.rating==4 %} checked="true" {% endif %} disabled="true" /><label for="star4" title="4 star"></label>
+          <input type="radio" id="star3" name="arating" value="3" {% if myrating.rating==3 %} checked="true" {% endif %} disabled="true" /><label for="star3" title="3 star"></label>
+          <input type="radio" id="star2" name="arating" value="2" {% if myrating.rating==2 %} checked="true" {% endif %} disabled="true" /><label for="star2" title="2 star"></label>
+          <input type="radio" id="star1" name="arating" value="1" {% if myrating.rating==1 %} checked="true" {% endif %} disabled="true" /><label for="star1" title="1 star"></label>
+        </div>
+        <div class="row">
+          <div class="col">
+            <label for="review" title="review">{{ myrating.comments }}</label>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
